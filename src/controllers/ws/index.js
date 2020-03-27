@@ -1,8 +1,10 @@
 const LocationController = require('./location');
+const UserController = require('./user');
 
 class SocketControllers {
     constructor(wss, config) {
         this.location = new LocationController(config && config.complexity);
+        this.user = new UserController(config && config.complexity);
         this.setUpRouting(wss);
     }
 
@@ -25,6 +27,10 @@ class SocketControllers {
                 switch (parsedMessage.type) {
                     case 'location': {
                         that.location.trackLocation(parsedMessage);
+                        return client.send('ack');
+                    }
+                    case 'register': {
+                        that.user.register(parsedMessage);
                         return client.send('ack');
                     }
                     default: {
