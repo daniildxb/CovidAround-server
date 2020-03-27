@@ -22,7 +22,7 @@ class SocketLocationController {
             throw new Error('Feature not initialized');
         }
         const { userId, data } = message;
-        this.locationModule.trackLocation(userId, data);
+        return this.locationModule.trackLocation(userId, data);
     }
 }
 

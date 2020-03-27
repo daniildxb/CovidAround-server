@@ -9,7 +9,7 @@ class PGLocationStorage extends BaseLocationStorage {
     }
 
     trackLocation(userId, locData) {
-        return this.pool.query(trackText, userId, locData.lat, locData.long, locData.timestamp);
+        return this.pool.query(trackText, [userId, locData.lat, locData.long, locData.timestamp]);
     }
 }
 

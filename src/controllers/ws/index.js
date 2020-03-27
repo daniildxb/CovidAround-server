@@ -16,14 +16,19 @@ class SocketControllers {
         const that = this;
         wss.on('connection', (client) => {
             client.on('message', (message) => {
-                switch (message.type) {
+                let parsedMessage;
+                try {
+                    parsedMessage = JSON.parse(message);
+                } catch (err) {
+                    return client.send('invalid message format');
+                }
+                switch (parsedMessage.type) {
                     case 'location': {
-                        that.location.trackLocation(message);
-                        client.send('ack');
-                        break;
+                        that.location.trackLocation(parsedMessage);
+                        return client.send('ack');
                     }
                     default: {
-                        client.send('invalid message type');
+                        return client.send('invalid message type');
                     }
                 }
             });
