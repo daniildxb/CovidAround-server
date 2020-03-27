@@ -10,4 +10,4 @@ class StorageManager {
     }
 }
 
-module.exports = new StorageManager();
+module.exports = StorageManager;

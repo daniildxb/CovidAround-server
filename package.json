@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "start:container": "npm run migration ; npm start",
+    "migration": "node db/migrate.js pg"
   },
   "author": "",
   "license": "ISC",

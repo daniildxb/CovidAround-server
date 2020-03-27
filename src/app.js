@@ -1,12 +1,11 @@
-const Storage = require('./storage');
 const Modules = require('./modules');
 
 class Application {
-    constructor(config, controllers) {
+    constructor(config, controllers, storage) {
         this.config = config;
         this.modules = new Modules(config.modules);
         this.controllers = controllers;
-        this.storage = Storage.getStorage(config.storage);
+        this.storage = storage;
     }
 
     async init() {

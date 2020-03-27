@@ -1,6 +1,6 @@
 const BaseLocationStorage = require('../../base/location');
 
-const trackText = 'insert into location(userId, lat, long, timestamp) values($1, $2, $3, $4)';
+const trackText = 'insert into location(user_id, lat, long, timestamp) values($1, $2, $3, $4)';
 
 class PGLocationStorage extends BaseLocationStorage {
     constructor(pool) {
