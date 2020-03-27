@@ -21,8 +21,7 @@ class SocketLocationController {
         if (!this.isActive()) {
             throw new Error('Feature not initialized');
         }
-        const userId = message.userId;
-        const data = message.data;
+        const { userId, data } = message;
         this.locationModule.trackLocation(userId, data);
     }
 }

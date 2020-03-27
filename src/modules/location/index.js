@@ -3,7 +3,7 @@ class LocationModule {
         this.config = config;
     }
 
-    async init(storage) {
+    init(storage) {
         if (!storage) {
             throw new Error('Error while initializing, storage required');
         }
