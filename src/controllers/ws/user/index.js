@@ -24,6 +24,14 @@ class SocketUserController {
         const { userId, data } = message;
         return this.userModule.register(userId, data);
     }
+
+    infect(message) {
+        if (!this.isActive()) {
+            throw new Error('Feature not initialized');
+        }
+        const { userId, data } = message;
+        return this.userModule.infect(userId, data);
+    }
 }
 
 module.exports = SocketUserController;

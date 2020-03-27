@@ -5,7 +5,8 @@ class SocketControllers {
     constructor(wss, config) {
         this.location = new LocationController(config && config.complexity);
         this.user = new UserController(config && config.complexity);
-        this.setUpRouting(wss);
+        this.wss = wss;
+        this.setUpRouting();
     }
 
     async init(modules) {
@@ -14,9 +15,9 @@ class SocketControllers {
         };
     }
 
-    setUpRouting(wss) {
+    setUpRouting() {
         const that = this;
-        wss.on('connection', (client) => {
+        this.wss.on('connection', (client) => {
             client.on('message', (message) => {
                 let parsedMessage;
                 try {
@@ -27,16 +28,21 @@ class SocketControllers {
                 switch (parsedMessage.type) {
                     case 'location': {
                         that.location.trackLocation(parsedMessage);
-                        return client.send('ack');
+                        break;
                     }
                     case 'register': {
                         that.user.register(parsedMessage);
-                        return client.send('ack');
+                        break;
+                    }
+                    case 'infect': {
+                        that.user.infect(parsedMessage);
+                        break;
                     }
                     default: {
                         return client.send('invalid message type');
                     }
                 }
+                return client.send('ack');
             });
         });
     }

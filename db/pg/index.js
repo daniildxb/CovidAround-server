@@ -10,6 +10,7 @@ module.exports = async () => {
             id varchar(16),
             first_name varchar(32),
             last_name varchar(32),
+            threat integer,
             PRIMARY KEY (user_id)
         );
     `);
@@ -22,5 +23,17 @@ module.exports = async () => {
             PRIMARY KEY (user_id,timestamp),
             FOREIGN KEY (user_id) REFERENCES users (id)
         );
+    `);
+    await pool.query(`
+            CREATE TABLE IF NOT EXISTS notifications (
+                id serial,
+                user_id varchar(16),
+                lat varchar(16),
+                long varchar(16),
+                threat integer,
+                timestamp integer,
+                PRIMARY KEY (id),
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            );
     `);
 };

@@ -1,7 +1,7 @@
-class BaseLocationStorage {
+class BaseStorage {
     getStorage() {
         throw new Error('Not implemented');
     }
 }
 
-module.exports = BaseLocationStorage;
+module.exports = BaseStorage;

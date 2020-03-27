@@ -1,4 +1,4 @@
-class LocationModule {
+class NotificationModule {
     constructor(config) {
         this.config = config;
     }
@@ -13,13 +13,10 @@ class LocationModule {
         }
     }
 
-    trackLocation(userId, locationData) {
-        return this.storage.trackLocation(userId, locationData);
-    }
-
-    findUsersWhoContacted(userId, timestamp) {
-        return this.storage.findUsersWhoContacted(userId, timestamp);
+    sendNotifications(notificationsData) {
+        const userId = { notificationData: notificationsData };
+        return this.storage.addNotification(userId, notificationsData);
     }
 }
 
-module.exports = LocationModule;
+module.exports = NotificationModule;

@@ -1,6 +1,7 @@
 class UserModule {
-    constructor(config) {
+    constructor(locationModule, config) {
         this.config = config;
+        this.locationModule = locationModule;
     }
 
     init(storage) {
@@ -15,6 +16,13 @@ class UserModule {
 
     register(userId, userData) {
         return this.storage.register(userId, userData);
+    }
+
+    async infect(userId, userData) {
+        const infectedTimestamp = userData.timestamp || Date.now();
+        await this.storage.infect(userId);
+        const users = await this.locationModule.findUsersWhoContacted(userId, infectedTimestamp);
+        return this.notificationModule.sendNotifications(users);
     }
 }
 

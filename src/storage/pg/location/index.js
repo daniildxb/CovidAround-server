@@ -1,7 +1,5 @@
 const BaseLocationStorage = require('../../base/location');
 
-const trackText = 'insert into location(user_id, lat, long, timestamp) values($1, $2, $3, $4)';
-
 class PGLocationStorage extends BaseLocationStorage {
     constructor(pool) {
         super(pool);
@@ -9,7 +7,13 @@ class PGLocationStorage extends BaseLocationStorage {
     }
 
     trackLocation(userId, locData) {
-        return this.pool.query(trackText, [userId, locData.lat, locData.long, locData.timestamp]);
+        const query = 'insert into location(user_id, lat, long, timestamp) values($1, $2, $3, $4)';
+        return this.pool.query(query, [userId, locData.lat, locData.long, locData.timestamp]);
+    }
+
+    findUsersWhoContacted(userId, timestamp) {
+        const query = '';
+        return this.pool.query(query, [userId, timestamp]);
     }
 }
 

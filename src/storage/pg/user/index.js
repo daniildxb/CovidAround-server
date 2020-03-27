@@ -1,7 +1,5 @@
 const BaseUserStorage = require('../../base/user');
 
-const trackText = 'insert into users(id, first_name, last_name) values($1, $2, $3)';
-
 class PGUserStorage extends BaseUserStorage {
     constructor(pool) {
         super(pool);
@@ -9,7 +7,12 @@ class PGUserStorage extends BaseUserStorage {
     }
 
     register(userId, userData) {
-        return this.pool.query(trackText, [userId, userData.firstName, userData.lastName]);
+        const query = 'insert into users(id, first_name, last_name) values($1, $2, $3)';
+        return this.pool.query(query, [userId, userData.firstName, userData.lastName]);
+    }
+
+    infect(userId) {
+        return this.pool.query('update users set infected=TRUE where user_id=$1', [userId]);
     }
 }
 
