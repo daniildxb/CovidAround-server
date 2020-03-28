@@ -10,7 +10,11 @@ class Modules {
     }
 
     init(storage) {
-        return this.location.init(storage.location);
+        return Promise.all([
+            this.location.init(storage.location),
+            this.user.init(storage.user),
+            this.location.init(storage.location),
+        ]);
     }
 }
 

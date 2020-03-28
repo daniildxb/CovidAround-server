@@ -1,25 +1,50 @@
 const LocationController = require('./location');
 const UserController = require('./user');
+const NotificationController = require('./notification');
 
 class SocketControllers {
     constructor(wss, config) {
+        this.wss = wss;
+        this.clients = {};
+        this.setUpRouting();
         this.location = new LocationController(config && config.complexity);
         this.user = new UserController(config && config.complexity);
-        this.wss = wss;
-        this.setUpRouting();
+        this.notification = new NotificationController(this.clients, config && config.notification);
     }
 
     async init(modules) {
-        return {
-            location: this.location.init(modules.location),
-        };
+        if (!modules) {
+            throw new Error('Error while initializing, modules are required');
+        }
+        if (!this.isInitialized) {
+            this.isInitialized = true;
+            return Promise.all([
+                this.location.init(modules.location),
+                this.user.init(modules.user),
+                this.notification.init(modules.notification),
+            ]);
+        }
+        return Promise.resolve();
+    }
+
+    isActive() {
+        return this.isInitialized;
     }
 
     setUpRouting() {
         const that = this;
         this.wss.on('connection', (client) => {
-            client.on('message', (message) => {
+            if (!this.isActive()) {
+                client.send('Feature not initialized');
+                client.close();
+            }
+            client.on('message', async (message) => {
                 let parsedMessage;
+                if (!message.userId) {
+                    client.send('userId is required');
+                    return client.close();
+                }
+                that.clients[message.userId] = client;
                 try {
                     parsedMessage = JSON.parse(message);
                 } catch (err) {
@@ -35,7 +60,8 @@ class SocketControllers {
                         break;
                     }
                     case 'infect': {
-                        that.user.infect(parsedMessage);
+                        const affectedUsers = await that.user.infect(parsedMessage);
+                        this.notification.notifyUsers(affectedUsers);
                         break;
                     }
                     default: {

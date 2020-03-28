@@ -13,9 +13,8 @@ class NotificationModule {
         }
     }
 
-    sendNotifications(notificationsData) {
-        const userId = { notificationData: notificationsData };
-        return this.storage.addNotification(userId, notificationsData);
+    storeNotifications(notificationsData) {
+        return this.storage.addNotifications(notificationsData);
     }
 }
 
