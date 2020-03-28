@@ -16,6 +16,10 @@ class NotificationModule {
     storeNotifications(notificationsData) {
         return this.storage.addNotifications(notificationsData);
     }
+
+    getNotifications(userId) {
+        return this.storage.getNewNotificationsByUser(userId);
+    }
 }
 
 module.exports = NotificationModule;

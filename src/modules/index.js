@@ -13,7 +13,7 @@ class Modules {
         return Promise.all([
             this.location.init(storage.location),
             this.user.init(storage.user),
-            this.location.init(storage.location),
+            this.notification.init(storage.notification),
         ]);
     }
 }

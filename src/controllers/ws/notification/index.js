@@ -34,9 +34,21 @@ class SocketNotificationController {
                 ...affected,
                 type: 'contact',
             };
-            client.send(message);
+            client.send(JSON.stringify(message));
         });
         return this.notificationModule.storeNotifications(notificationsToStore);
+    }
+
+    async getUserNotifications(message) {
+        if (!this.isActive()) {
+            throw new Error('Feature not initialized');
+        }
+        const { userId } = message;
+        const data = await this.notificationModule.getNotifications(userId);
+        return {
+            type: 'notifications',
+            data,
+        };
     }
 }
 

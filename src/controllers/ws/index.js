@@ -40,13 +40,13 @@ class SocketControllers {
             }
             client.on('message', async (message) => {
                 let parsedMessage;
-                if (!message.userId) {
-                    client.send('userId is required');
-                    return client.close();
-                }
-                that.clients[message.userId] = client;
                 try {
                     parsedMessage = JSON.parse(message);
+                    if (!parsedMessage.userId) {
+                        client.send('userId is required');
+                        return client.close();
+                    }
+                    that.clients[message.userId] = client;
                 } catch (err) {
                     return client.send('invalid message format');
                 }
@@ -61,7 +61,12 @@ class SocketControllers {
                     }
                     case 'infect': {
                         const affectedUsers = await that.user.infect(parsedMessage);
-                        this.notification.notifyUsers(affectedUsers);
+                        that.notification.notifyUsers(affectedUsers);
+                        break;
+                    }
+                    case 'notifications': {
+                        const notifications = await that.notification.getUserNotifications(parsedMessage);
+                        client.send(JSON.stringify(notifications));
                         break;
                     }
                     default: {

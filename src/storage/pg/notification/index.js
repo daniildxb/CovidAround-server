@@ -29,12 +29,14 @@ class PGNotificationStorage extends BaseNotificationStorage {
 
     removeNotification(userId, notificationId) {
         const query = 'DELETE FROM notifications WHERE id = $1 AND user_id = $2';
-        return this.pool(query, [notificationId, userId]);
+        return this.pool.query(query, [notificationId, userId]);
     }
 
-    getNewNotificationsByUser(userId) {
-        const query = 'SELECT * FROM notifications user_id = $1 AND received=false';
-        return this.pool(query, [userId]);
+    async getNewNotificationsByUser(userId) {
+        const query = `UPDATE notifications SET received=true WHERE user_id = $1 AND received=false
+                        RETURNING notifications.*`;
+        const result = await this.pool.query(query, [userId]);
+        return result.rows;
     }
 }
 
