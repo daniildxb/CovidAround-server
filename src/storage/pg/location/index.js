@@ -7,7 +7,7 @@ class PGLocationStorage extends BaseLocationStorage {
     }
 
     trackLocation(userId, locData) {
-        const query = 'insert into location(user_id, lat, long, timestamp) values($1, $2, $3, $4)';
+        const query = 'INSERT INTO location(user_id, lat, long, timestamp) VALUES($1, $2, $3, $4)';
         return this.pool.query(query, [userId, locData.lat, locData.long, locData.timestamp]);
     }
 

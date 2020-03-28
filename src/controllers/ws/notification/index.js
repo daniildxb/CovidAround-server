@@ -23,17 +23,15 @@ class SocketNotificationController {
             throw new Error('Feature not initialized');
         }
         const notificationsToStore = [];
-        affectedUsers.forEach((user) => {
-            const { userId, contactLevel, contactLocation } = user;
+        affectedUsers.forEach((affected) => {
+            const { userId } = affected;
             const client = this.clients[userId];
             if (!client) {
-                notificationsToStore.push(user);
+                notificationsToStore.push(affected);
                 return;
             }
             const message = {
-                userId,
-                contactLevel,
-                contactLocation,
+                ...affected,
                 type: 'contact',
             };
             client.send(message);

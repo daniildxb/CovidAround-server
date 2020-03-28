@@ -7,12 +7,12 @@ class PGUserStorage extends BaseUserStorage {
     }
 
     register(userId, userData) {
-        const query = 'insert into users(id, first_name, last_name) values($1, $2, $3)';
+        const query = 'INSERT INTO users(id, first_name, last_name) VALUES($1, $2, $3)';
         return this.pool.query(query, [userId, userData.firstName, userData.lastName]);
     }
 
-    infect(userId) {
-        return this.pool.query('update users set infected=TRUE where user_id=$1', [userId]);
+    infect(userId, threat = 2) {
+        return this.pool.query('UPDATE users SET threat=$2 WHERE user_id=$1', [userId, threat]);
     }
 }
 
