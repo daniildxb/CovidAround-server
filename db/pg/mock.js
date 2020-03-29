@@ -42,7 +42,7 @@ function setupLocations() {
 }
 
 function setupNotifications() {
-    const insertPart = 'INSERT INTO notifications(user_id, sLat, sLong, lat, long, threat, timestamp)';
+    const insertPart = 'INSERT INTO notifications(user_id, slat, slong, lat, long, threat, timestamp)';
     const valuesPart = `VALUES ${notifications.map((el, index) => {
         const offset = (index * 7) + 1;
         let valueStr = `($${offset}, $${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6})`;
@@ -53,7 +53,7 @@ function setupNotifications() {
     })}`;
     const query = `${insertPart} ${valuesPart}`;
     const valuesArr = notifications.reduce(
-        (store, _) => { store.push(...[_.user_id, _.sLat, _.sLong, _.lat, _.long, _.threat, _.timestamp]); return store; },
+        (store, _) => { store.push(...[_.user_id, _.slat, _.slong, _.lat, _.long, _.threat, _.timestamp]); return store; },
         [],
     );
     return pool.query(query, valuesArr);

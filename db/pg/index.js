@@ -28,8 +28,8 @@ async function createTables() {
             CREATE TABLE IF NOT EXISTS notifications (
                 id serial,
                 user_id varchar(16),
-                sLat varchar(16),
-                sLong varchar(16),
+                slat varchar(16),
+                slong varchar(16),
                 lat varchar(16),
                 long varchar(16),
                 threat integer,
